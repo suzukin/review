@@ -136,7 +136,8 @@ EOT
 </body>
 </html>
 EOT
-      header + messages() + convert_outencoding(@output.string, @book.config["outencoding"]) + footer
+#      header + messages() + convert_outencoding(@output.string, @book.config["outencoding"]) + footer
+       messages() + convert_outencoding(@output.string, @book.config["outencoding"])
     end
 
     def xmlns_ops_prefix
@@ -208,9 +209,9 @@ EOT
         puts a_id unless label.nil?
       else
         if label.nil?
-          puts %Q[<h#{level}>#{a_id}#{prefix}#{compile_inline(caption)}</h#{level}>]
+          puts %Q[<h#{level}>#{a_id}#{compile_inline(caption)}</h#{level}>]
         else
-          puts %Q[<h#{level} id="#{normalize_id(label)}">#{a_id}#{prefix}#{compile_inline(caption)}</h#{level}>]
+          puts %Q[<h#{level} id="#{normalize_id(label)}">#{a_id}#{compile_inline(caption)}</h#{level}>]
         end
       end
     end
@@ -230,19 +231,19 @@ EOT
     end
 
     def column_begin(level, label, caption)
-      puts %Q[<div class="column">]
+      puts %Q[<div class="kakomi-green">]
 
       @column += 1
       puts '' if level > 1
-      a_id = %Q[<a id="column-#{@column}"></a>]
+      a_id = %Q[id="column-#{@column}"]
 
       if caption.empty?
         puts a_id unless label.nil?
       else
         if label.nil?
-          puts %Q[<h#{level}>#{a_id}#{compile_inline(caption)}</h#{level}>]
+          puts %Q[<div class="kakomi-midasi" #{a_id}>#{compile_inline(caption)}</div>]
         else
-          puts %Q[<h#{level} id="#{normalize_id(label)}">#{a_id}#{compile_inline(caption)}</h#{level}>]
+          puts %Q[<div class="kakomi-midasi" id="#{normalize_id(label)}" #{a_id}>#{compile_inline(caption)}</div>]
         end
       end
 #      headline(level, label, caption)
@@ -423,7 +424,7 @@ EOT
     def read(lines)
       if @book.config["deprecated-blocklines"].nil?
         blocked_lines = split_paragraph(lines)
-        puts %Q[<div class="lead">\n#{blocked_lines.join("\n")}\n</div>]
+        puts %Q[<p class="lead">\n#{blocked_lines.join("\n")}\n</p>]
       else
         puts %Q[<p class="lead">\n#{lines.join("\n")}\n</p>]
       end
@@ -444,15 +445,15 @@ EOT
 
     def list_header(id, caption)
       if get_chap.nil?
-        puts %Q[<p class="caption">#{I18n.t("list")}#{I18n.t("format_number_header_without_chapter", [@chapter.list(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}</p>]
+        puts %Q[<div class="caption">#{I18n.t("list")}#{I18n.t("format_number_header_without_chapter", [@chapter.list(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}</div>]
       else
-        puts %Q[<p class="caption">#{I18n.t("list")}#{I18n.t("format_number_header", [get_chap, @chapter.list(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}</p>]
+        puts %Q[<div class="caption">#{I18n.t("list")}#{I18n.t("format_number_header", [get_chap, @chapter.list(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}</div>]
       end
     end
 
     def list_body(id, lines)
       id ||= ''
-      print %Q[<pre class="list">]
+      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
       body = lines.inject(''){|i, j| i + detab(j) + "\n"}
       lexer = File.extname(id).gsub(/\./, '')
       puts highlight(:body => body, :lexer => lexer, :format => 'html')
@@ -468,7 +469,7 @@ EOT
 
     def source_header(caption)
       if caption.present?
-        puts %Q[<p class="caption">#{compile_inline(caption)}</p>]
+        puts %Q[<div class="caption">#{compile_inline(caption)}</div>]
       end
     end
 
@@ -493,7 +494,7 @@ EOT
     end
 
     def listnum_body(lines)
-      print %Q[<pre class="list">]
+      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
       lines.each_with_index do |line, i|
         puts detab((i+1).to_s.rjust(2) + ": " + line)
       end
@@ -502,8 +503,8 @@ EOT
 
     def emlist(lines, caption = nil)
       puts %Q[<div class="emlist-code">]
-      puts %Q(<p class="caption">#{caption}</p>) unless caption.nil?
-      print %Q[<pre class="emlist">]
+      puts %Q(<div class="caption">#{caption}</div>) unless caption.nil?
+      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
       lines.each do |line|
         puts detab(line)
       end
@@ -513,8 +514,8 @@ EOT
 
     def emlistnum(lines, caption = nil)
       puts %Q[<div class="emlistnum-code">]
-      puts %Q(<p class="caption">#{caption}</p>) unless caption.nil?
-      print %Q[<pre class="emlist">]
+      puts %Q(<div class="caption">#{caption}</div>) unless caption.nil?
+      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
       lines.each_with_index do |line, i|
         puts detab((i+1).to_s.rjust(2) + ": " + line)
       end
@@ -524,8 +525,8 @@ EOT
 
     def cmd(lines, caption = nil)
       puts %Q[<div class="cmd-code">]
-      puts %Q(<p class="caption">#{caption}</p>) unless caption.nil?
-      print %Q[<pre class="cmd">]
+      puts %Q(<div class="caption">#{caption}</div>) unless caption.nil?
+      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
       lines.each do |line|
         puts detab(line)
       end
@@ -610,8 +611,8 @@ QUOTE
 
     def image_image(id, caption, metric)
       metrics = parse_metric("html", metric)
-      puts %Q[<div id="#{normalize_id(id)}" class="image">]
-      puts %Q[<img src="#{@chapter.image(id).path.sub(/\A\.\//, "")}" alt="#{escape_html(compile_inline(caption))}"#{metrics} />]
+      puts %Q[<div id="#{normalize_id(id)}" class="imagebox">]
+      puts %Q[<img src="/sites/default/files/articles/#{@chapter.image(id).path.sub(/\A\.\//, "")}" alt="#{escape_html(compile_inline(caption))}"#{metrics} />]
       image_header id, caption
       puts %Q[</div>]
     end
@@ -628,13 +629,11 @@ QUOTE
     end
 
     def image_header(id, caption)
-      puts %Q[<p class="caption">]
       if get_chap.nil?
-        puts %Q[#{I18n.t("image")}#{I18n.t("format_number_header_without_chapter", [@chapter.image(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}]
+        puts %Q[<div class="caption">#{I18n.t("image")}#{I18n.t("format_number_header_without_chapter", [@chapter.image(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}</div>]
       else
-        puts %Q[#{I18n.t("image")}#{I18n.t("format_number_header", [get_chap, @chapter.image(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}]
+        puts %Q[<div class="caption">#{I18n.t("image")}#{I18n.t("format_number_header", [get_chap, @chapter.image(id).number])}#{I18n.t("caption_prefix")}#{compile_inline(caption)}</div>]
       end
-      puts %Q[</p>]
     end
 
     def table(lines, id = nil, caption = nil)

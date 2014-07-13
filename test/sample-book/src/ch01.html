@@ -1,0 +1,57 @@
+<h1><a id="h1"></a>サンプル</h1>
+<p class="lead">
+<p>書き方のサンプルです。上書きするなりして消して下さい。</p>
+</p>
+
+<h2><a id="h1-1"></a>本文の書き方</h2>
+<p>最初の段落です。この行も同じ段落です。</p>
+<p>次の段落です。</p>
+<p>２行以上以上空いていても１行空いているのと同様に処理します。</p>
+
+<h3><a id="h1-1-1"></a>見出し</h3>
+<p>「=」「==」「===」の後に一文字空白をあけると見出しになります。</p>
+<div class="kakomi-green">
+
+<div class="kakomi-midasi" id="column-1">コラムについて</div>
+<p>見出しの先頭に「[column]」と書くと、そこはコラムになります。</p>
+</div>
+
+<h2><a id="h1-2"></a>箇条書き</h2>
+<p>番号のない箇条書きは「*」を使います。前後に空白を入れて下さい。</p>
+<ul>
+<li>1つ目</li>
+<li>2つ目</li>
+<li>3つ目</li>
+</ul>
+<p>番号つきの箇条書きには、「1.」「2.」などと書きます。数字の値は実際には無視され、連番が振られます。</p>
+<ol>
+<li>1つ目</li>
+<li>2つ目</li>
+<li>3つ目</li>
+</ol>
+
+<h2><a id="h1-3"></a>ソースコードなどのリスト</h2>
+<p>リストには「//list」ブロックや「//emlist」ブロックを使います。</p>
+<div class="caption-code">
+<div class="caption">リスト1.1: リストのサンプル</div>
+<pre class="brush: plain; type="syntaxhighlighter">int main(int argc, char **argv) {
+  puts(&quot;OK&quot;);
+  return 0;
+}
+</pre>
+</div>
+<p>文中にリストを書くには「//emlist」になります。</p>
+<div class="emlist-code">
+<pre class="brush: plain; type="syntaxhighlighter">def main
+  puts &quot;ok&quot;
+end
+</pre>
+</div>
+
+<h2><a id="h1-4"></a>画像</h2>
+<p>画像は「//image」ブロックを使います。</p>
+<div id="imgsample" class="imagebox">
+<img src="/sites/default/files/articles/images/ch01-imgsample.jpg" alt="画像サンプル" />
+<div class="caption">図1.1: 画像サンプル</div>
+</div>
+<p>より詳しくは、<a href="https://github.com/kmuto/review/blob/master/doc/format.rdoc" class="link">https://github.com/kmuto/review/blob/master/doc/format.rdoc</a>を御覧ください。</p>
