@@ -453,7 +453,7 @@ EOT
 
     def list_body(id, lines)
       id ||= ''
-      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
+      print %Q[<pre class="brush: plain;" type="syntaxhighlighter">]
       body = lines.inject(''){|i, j| i + detab(j) + "\n"}
       lexer = File.extname(id).gsub(/\./, '')
       puts highlight(:body => body, :lexer => lexer, :format => 'html')
@@ -494,7 +494,7 @@ EOT
     end
 
     def listnum_body(lines)
-      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
+      print %Q[<pre class="brush: plain;" type="syntaxhighlighter">]
       lines.each_with_index do |line, i|
         puts detab((i+1).to_s.rjust(2) + ": " + line)
       end
@@ -504,7 +504,7 @@ EOT
     def emlist(lines, caption = nil)
       puts %Q[<div class="emlist-code">]
       puts %Q(<div class="caption">#{caption}</div>) unless caption.nil?
-      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
+      print %Q[<pre class="brush: plain;" type="syntaxhighlighter">]
       lines.each do |line|
         puts detab(line)
       end
@@ -515,7 +515,7 @@ EOT
     def emlistnum(lines, caption = nil)
       puts %Q[<div class="emlistnum-code">]
       puts %Q(<div class="caption">#{caption}</div>) unless caption.nil?
-      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
+      print %Q[<pre class="brush: plain;" type="syntaxhighlighter">]
       lines.each_with_index do |line, i|
         puts detab((i+1).to_s.rjust(2) + ": " + line)
       end
@@ -526,7 +526,7 @@ EOT
     def cmd(lines, caption = nil)
       puts %Q[<div class="cmd-code">]
       puts %Q(<div class="caption">#{caption}</div>) unless caption.nil?
-      print %Q[<pre class="brush: plain; type="syntaxhighlighter">]
+      print %Q[<pre class="brush: plain;" type="syntaxhighlighter">]
       lines.each do |line|
         puts detab(line)
       end
